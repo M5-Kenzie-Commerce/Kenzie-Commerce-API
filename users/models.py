@@ -10,10 +10,14 @@ class OrderStatusChoices(models.TextChoices):
 
 
 class User(AbstractUser):
-    ...
-# Usuário deve ter uma relacionamento com um campo de endereço.
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=60)
+    email = models.EmailField(unique=True, error_messages={"error": "Email alredy exists"})
+    is_saller = models.BooleanField(default=False)
+    createdAt = models.DateTimeField()
+    updatedAt = models.DateTimeField()
 
-# Tipos de usuários: Administrador, Vendedor, Cliente
+    address = models.OneToOneField("addresses.Address", on_delete=models.CASCADE)
 
 
 class UserOrder(models.Model):
