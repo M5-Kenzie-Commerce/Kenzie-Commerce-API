@@ -16,7 +16,7 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=60)
     email = models.EmailField(unique=True, error_messages={"error": "Email alredy exists"})
     is_saller = models.BooleanField(default=False)
-    createdAt = models.DateTimeField()
+    createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField()
 
     address = models.OneToOneField("addresses.Address", on_delete=models.CASCADE)
