@@ -22,7 +22,7 @@ class UserDetailView(RetrieveUpdateAPIView):
     ...
 
 
-class UserOrder(CreateAPIView):
+class UserOrderView(CreateAPIView):
     ...
 # Toda vez que o status do pedido for atualizado
 # deve ser enviado um email ao comprador.
