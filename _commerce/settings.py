@@ -158,7 +158,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.User"
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'BandkampAPI',
+    'TITLE': 'm5-Kenzie-Commerce',
     'DESCRIPTION': 'user, album and music manager application',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
