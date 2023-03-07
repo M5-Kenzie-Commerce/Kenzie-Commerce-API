@@ -18,8 +18,9 @@ class User(AbstractUser):
     is_saller = models.BooleanField(default=False)
     createdAt = models.DateTimeField(auto_now_add=True)
     updatedAt = models.DateTimeField()
+    is_superuser = models.BooleanField(default=False)
 
-    address = models.OneToOneField("addresses.Address", on_delete=models.CASCADE)
+    address = models.OneToOneField("addresses.Address", related_name="user", on_delete=models.CASCADE)
 
 
 class UserOrder(models.Model):
