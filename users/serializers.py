@@ -14,14 +14,15 @@ class UserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "email",
+            "username",
             "is_superuser",
             "is_saller",
-            "address",
-            "username"
+            "address"
             ]
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
+        user_password = validated_data
         user_address = validated_data.pop("address")
         address_obj = Address.objects.create(**user_address)
 
@@ -30,11 +31,18 @@ class UserSerializer(serializers.ModelSerializer):
 
         return User.objects.create_user(**validated_data, address=address_obj)
 
-    def update(self, instance: User, validated_data):
+    def update(self, instance: User, validated_data: dict) -> User:
+        new_address = validated_data.pop("address", None)
+        new_password = validated_data.pop("password", None)
+
+        if new_address:
+            Address.objects.all().update(**new_address)
+
         for key, value in validated_data.items():
             setattr(instance, key, value)
 
-        instance.set_password(validated_data["password"])
+        if new_password:
+            instance.set_password(validated_data["password"])
         instance.save()
 
         return instance

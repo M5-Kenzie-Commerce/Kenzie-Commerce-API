@@ -1,8 +1,9 @@
 from .models import User
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer, UserOrderSerializer
 from .permissions import UserPermission
-from rest_framework.generics import ListCreateAPIView, CreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import ListCreateAPIView, CreateAPIView, UpdateAPIView
 
 
 # O usuário deve ter acesso a uma rota onde
@@ -20,9 +21,11 @@ class UserView(ListCreateAPIView):
 # O usuário administrador deve ter acesso a todas as rotas.
 
 
-class UserDetailView(RetrieveUpdateAPIView):
+class UserDetailView(UpdateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    lookup_url_kwarg = "user_id"
 
 
 class UserOrderView(CreateAPIView):
