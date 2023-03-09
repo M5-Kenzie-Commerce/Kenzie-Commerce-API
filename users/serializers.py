@@ -18,15 +18,15 @@ class UserSerializer(serializers.ModelSerializer):
             "is_superuser",
             "is_saller",
             "address",
-            "password"
-            ]
-        extra_kwargs = {'password': {'write_only': True}}
+            "password",
+        ]
+        extra_kwargs = {"password": {"write_only": True}}
 
     def create(self, validated_data):
         user_address = validated_data.pop("address")
         address_obj = Address.objects.create(**user_address)
 
-        if validated_data['is_superuser'] is True:
+        if validated_data["is_superuser"] is True:
             return User.objects.create_superuser(**validated_data, address=address_obj)
 
         return User.objects.create_user(**validated_data, address=address_obj)
