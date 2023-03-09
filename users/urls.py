@@ -8,5 +8,4 @@ urlpatterns = [
     path("oders/", views.UserOrderView.as_view()),
     path("login/", TokenObtainPairView.as_view()),
     path("refresh/", TokenRefreshView.as_view()),
-    
 ]

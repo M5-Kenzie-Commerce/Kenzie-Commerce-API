@@ -23,11 +23,16 @@ class User(AbstractUser):
     is_superuser = models.BooleanField(default=False)
 
     address = models.OneToOneField(
-        "addresses.Address", related_name="user", on_delete=models.CASCADE
+        "addresses.Address",
+        related_name="user",
+        on_delete=models.CASCADE,
     )
 
     cart = models.OneToOneField(
-        "shopping_cart.Cart", related_name="user", on_delete=models.CASCADE
+        "shopping_cart.Cart",
+        related_name="user",
+        on_delete=models.CASCADE,
+        null=True,
     )
 
 

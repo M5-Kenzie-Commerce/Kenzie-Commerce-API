@@ -1,7 +1,9 @@
-from .models import CartProduct
-from .serializers import ShoppingCartSerializer
+from .models import CartProduct, Cart
+from .serializers import ShoppingCartSerializer, CartSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
+from django.shortcuts import get_object_or_404
+from products.models import Product
 
 
 class ShoppingCart(CreateAPIView):
@@ -14,19 +16,20 @@ class ShoppingCart(CreateAPIView):
     lookup_url_kwarg = "product_id"
 
     def perform_create(self, serializer):
-        product_id = self.kwargs[self.lookup_url_kwarg]
-        cart_id = self.request.user.carrinho
+        product_id = get_object_or_404(Product, pk=self.kwargs[self.lookup_url_kwarg])
+        cart_id = self.request.user.cart
+
         serializer.save(product=product_id, cart=cart_id)
 
 
-class ShoppingCartDetailView(RetrieveUpdateDestroyAPIView):
+class CartDetailView(RetrieveUpdateDestroyAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = []
 
-    queryset = CartProduct.objects.all()
-    serializer_class = ShoppingCartSerializer
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
 
-    lookup_url_kwarg = "product_id"
+    lookup_url_kwarg = "cart_id"
 
 
 # Caso um usuário tenha um produto no carrinho

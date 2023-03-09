@@ -5,7 +5,7 @@ import uuid
 class Cart(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     products = models.ManyToManyField(
-        "",
+        "products.Product",
         through="shopping_cart.CartProduct",
         related_name="carts",
     )
@@ -20,12 +20,9 @@ class CartProduct(models.Model):
     )
 
     product = models.ForeignKey(
-        "",
+        "products.Product",
         on_delete=models.CASCADE,
         related_name="product_cart_products",
     )
 
     amount = models.PositiveIntegerField()
-
-
-# Fazer o relacionamento many-to-many(Product => Cart) indicando a tabela pivo CartProduct
