@@ -31,6 +31,6 @@ class UserOrder(models.Model):
     ordered_by = models.ForeignKey(
         "users.User", on_delete=models.PROTECT, related_name="orders"
     )
-    cart_products = models.ForeignKey(
-        "shopping_cart", on_delete=models.PROTECT, related_name="products_ondered"
+    product = models.ForeignKey(
+        "shopping_cart", on_delete=models.PROTECT, related_name="orders"
     )

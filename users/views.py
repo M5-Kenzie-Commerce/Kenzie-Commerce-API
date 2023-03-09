@@ -1,4 +1,4 @@
-from .models import User
+from .models import User, UserOrder
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer, UserOrderSerializer
@@ -26,7 +26,6 @@ class UserDetailView(RetrieveUpdateDestroyAPIView):
 
 
 class UserOrderView(CreateAPIView):
-    ...
-# Toda vez que o status do pedido for atualizado
-# deve ser enviado um email ao comprador.
-# O vendedor do produto deve conseguir atualizar o status do pedido.
+
+    queryset = UserOrder.objects.all()
+    serializer_class = UserOrderSerializer
