@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, UserOrder
 from addresses.models import Address
 from addresses.serializers import AddressSerializer
 
@@ -18,9 +18,9 @@ class UserSerializer(serializers.ModelSerializer):
             "is_superuser",
             "is_saller",
             "address",
-            "password",
-        ]
-        extra_kwargs = {"password": {"write_only": True}}
+            "password"
+            ]
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user_address = validated_data.pop("address")
@@ -49,4 +49,20 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserOrderSerializer(serializers.ModelSerializer):
-    ...
+
+    class Meta:
+        model = UserOrder
+        fields = [
+            "id",
+            "order_status",
+            "ordered_at",
+            "cart_products",
+            "ordered_by"
+        ]
+        read_only_fields = [
+            "id",
+            "ordered_at",
+            "cart_products",
+            "ordered_by"
+        ]
+        depth = 2
