@@ -119,9 +119,12 @@ SIMPLE_JWT = {
 }
 
 REST_FRAMEWORK = {
+    # "DEFAULT_AUTHENTICATION_CLASSES": (
+    #   "rest_framework_simplejwt.authentication.JWTAuthentication",
+    # ),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    # "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    # "PAGE_SIZE": 2,
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 5,
 }
 
 
@@ -150,7 +153,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.User"
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "BandkampAPI",
+    "TITLE": "m5-Kenzie-Commerce",
     "DESCRIPTION": "user, album and music manager application",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
