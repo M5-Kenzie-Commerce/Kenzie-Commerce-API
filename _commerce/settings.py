@@ -45,7 +45,7 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = ["rest_framework", "drf_spectacular"]
 
-MY_APPS = ["users", "addresses", "products", "shopping_cart"]
+MY_APPS = ["users", "addresses", "categories", "products", "shopping_cart"]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + MY_APPS
 
@@ -154,7 +154,7 @@ AUTH_USER_MODEL = "users.User"
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "m5-Kenzie-Commerce",
-    "DESCRIPTION": "user, album and music manager application",
+    "DESCRIPTION": "user, product and shopping_cart application",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }
