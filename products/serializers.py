@@ -28,7 +28,6 @@ class ProductSerializer(serializers.ModelSerializer):
         ]
         extra_kwargs = {
             "id": {"read_only": True},
-            "user": {"read_only": True},
             "is_avaliable": {"read_only": True},
         }
 
@@ -37,8 +36,16 @@ class ProductSerializer(serializers.ModelSerializer):
             return False
         return True
 
+    def issaller_check(validated_data):
+        if (
+            not validated_data["user"].is_saller
+            and not validated_data["user"].is_superuser
+        ):
+            raise serializers.ValidationError({"details": "user  not a saller"})
+
     def create(self, validated_data):
         category_obj = CategorySerializer.create_or_update_category(validated_data)
+        ProductSerializer.issaller_check(validated_data)
         validated_data["is_avaliable"] = ProductSerializer.stock_check(validated_data)
         return Product.objects.create(**validated_data, category=category_obj)
 

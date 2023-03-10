@@ -18,8 +18,13 @@ class ProductsView(ListCreateAPIView):
 
 
 class ProductsDetailView(RetrieveUpdateDestroyAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticatedOrReadOnly, ProductPermission]
+
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+    lookup_url_kwarg = "product_id"
 
     def get_queryset(self):
 
