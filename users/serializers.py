@@ -1,52 +1,54 @@
 from rest_framework import serializers
-from .models import User
-from addresses.models import Address
-from addresses.serializers import AddressSerializer
+from .models import Product
+from categories.models import Category
+from categories.serializers import CategorySerializer
+from django.shortcuts import get_object_or_404
+from users.models import User
+from users.serializers import UserSerializer
+
+# Deverá ter um estoque dos itens,
+# quando o item estiver com 0 unidades deverá ter um campo
+# indicando que o produto está indisponível.
+# Somente um vendendor pode cadastrar/alterar produtos
 
 
-class UserSerializer(serializers.ModelSerializer):
-    address = AddressSerializer()
+class ProductSerializer(serializers.ModelSerializer):
+    category = CategorySerializer()
 
     class Meta:
-        model = User
+        model = Product
         fields = [
             "id",
-            "first_name",
-            "last_name",
-            "email",
-            "username",
-            "is_superuser",
-            "is_saller",
-            "address",
-            "password",
+            "name_product",
+            "price",
+            "stock",
+            "is_avaliable",
+            "category",
+            "user",
         ]
-        extra_kwargs = {"password": {"write_only": True}}
+        extra_kwargs = {"is_avaliable": {"read_only": True}}
+
+    def stock_check(validated_data):
+        if validated_data["stock"] == 0:
+            return False
+        return True
 
     def create(self, validated_data):
-        user_address = validated_data.pop("address")
-        address_obj = Address.objects.create(**user_address)
+        category_obj = CategorySerializer.create_or_update_category(validated_data)
+        validated_data["is_avaliable"] = ProductSerializer.stock_check(validated_data)
+        return Product.objects.create(**validated_data, category=category_obj)
 
-        if validated_data["is_superuser"] is True:
-            return User.objects.create_superuser(**validated_data, address=address_obj)
-
-        return User.objects.create_user(**validated_data, address=address_obj)
-
-    def update(self, instance: User, validated_data: dict) -> User:
-        new_address = validated_data.pop("address", None)
-        new_password = validated_data.pop("password", None)
-
-        if new_address:
-            Address.objects.all().update(**new_address)
-
+    def update(self, instance: Product, validated_data: dict):
+        if validated_data["category"]:
+            category_obj = CategorySerializer.create_or_update_category(validated_data)
+            instance.category = category_obj
         for key, value in validated_data.items():
             setattr(instance, key, value)
-
-        if new_password:
-            instance.set_password(validated_data["password"])
+        instance.is_avaliable = ProductSerializer.stock_check(validated_data)
         instance.save()
 
         return instance
 
 
-class UserOrderSerializer(serializers.ModelSerializer):
+class ProductOrderSerializer(serializers.Serializer):
     ...

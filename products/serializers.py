@@ -26,26 +26,26 @@ class ProductSerializer(serializers.ModelSerializer):
             "category",
             "user",
         ]
+        extra_kwargs = {"is_avaliable": {"read_only": True}}
+
+    def stock_check(validated_data):
+        if validated_data["stock"] == 0:
+            return False
+        return True
 
     def create(self, validated_data):
-        product_category = validated_data.pop("category")
-        category_exist = Category.objects.filter(
-            category_name__icontains=product_category["category_name"].lower()
-        )
-        category_obj = (
-            category_exist.first()
-            if category_exist.exists()
-            else Category.objects.create(
-                category_name=product_category["category_name"].lower()
-            )
-        )
-        if validated_data["stock"] == 0:
-            validated_data["is_avaliable"] = False
-
+        category_obj = CategorySerializer.create_or_update_category(validated_data)
+        validated_data["is_avaliable"] = ProductSerializer.stock_check(validated_data)
         return Product.objects.create(**validated_data, category=category_obj)
 
-    def update(self, instance: Product, validated_data):
-        ...
+    def update(self, instance: Product, validated_data: dict):
+        if validated_data["category"]:
+            category_obj = CategorySerializer.create_or_update_category(validated_data)
+            instance.category = category_obj
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+        instance.is_avaliable = ProductSerializer.stock_check(validated_data)
+        instance.save()
 
         return instance
 
