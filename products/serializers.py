@@ -23,10 +23,9 @@ class ProductSerializer(serializers.ModelSerializer):
             "price",
             "stock",
             "category",
+            "is_avaliable",
             "user",
         ]
-        depth = 1
-        extra_kwargs = {"is_avaliable": {"read_only": True}}
 
     def stock_check(validated_data):
         if validated_data["stock"] == 0:
