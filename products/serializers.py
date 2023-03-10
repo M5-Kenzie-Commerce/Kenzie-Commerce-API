@@ -38,7 +38,7 @@ class ProductSerializer(serializers.ModelSerializer):
         validated_data["is_avaliable"] = ProductSerializer.stock_check(validated_data)
         return Product.objects.create(**validated_data, category=category_obj)
 
-    def update(self, instance: Product, validated_data: dict):
+    def update(self, instance: Product, validated_data: dict) -> Product:
         if "category" in validated_data:
             category_obj = CategorySerializer.create_or_update_category(validated_data)
             instance.category = category_obj
