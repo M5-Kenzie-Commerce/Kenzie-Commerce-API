@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import User
 from addresses.models import Address
+from shopping_cart.models import Cart
 from addresses.serializers import AddressSerializer
 
 
@@ -18,18 +19,31 @@ class UserSerializer(serializers.ModelSerializer):
             "is_superuser",
             "is_saller",
             "address",
+            "cart_id",
             "password",
         ]
-        extra_kwargs = {"password": {"write_only": True}}
+        extra_kwargs = {
+            "password": {"write_only": True},
+            "cart_id": {"read_only": True},
+        }
 
     def create(self, validated_data):
         user_address = validated_data.pop("address")
         address_obj = Address.objects.create(**user_address)
 
-        if validated_data["is_superuser"] is True:
-            return User.objects.create_superuser(**validated_data, address=address_obj)
+        cart = Cart.objects.create()
 
-        return User.objects.create_user(**validated_data, address=address_obj)
+        if validated_data["is_superuser"] is True:
+            return User.objects.create_superuser(
+                **validated_data,
+                address=address_obj,
+            )
+
+        return User.objects.create_user(
+            **validated_data,
+            address=address_obj,
+            cart=cart,
+        )
 
     def update(self, instance: User, validated_data: dict) -> User:
         new_address = validated_data.pop("address", None)
