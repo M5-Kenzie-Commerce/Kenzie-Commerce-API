@@ -22,10 +22,10 @@ class ProductSerializer(serializers.ModelSerializer):
             "name_product",
             "price",
             "stock",
-            "is_avaliable",
             "category",
             "user",
         ]
+        depth = 1
         extra_kwargs = {"is_avaliable": {"read_only": True}}
 
     def stock_check(validated_data):
@@ -39,12 +39,13 @@ class ProductSerializer(serializers.ModelSerializer):
         return Product.objects.create(**validated_data, category=category_obj)
 
     def update(self, instance: Product, validated_data: dict):
-        if validated_data["category"]:
+        if "category" in validated_data:
             category_obj = CategorySerializer.create_or_update_category(validated_data)
             instance.category = category_obj
         for key, value in validated_data.items():
             setattr(instance, key, value)
-        instance.is_avaliable = ProductSerializer.stock_check(validated_data)
+        if "stock" in validated_data:
+            instance.is_avaliable = ProductSerializer.stock_check(validated_data)
         instance.save()
 
         return instance
