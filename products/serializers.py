@@ -22,8 +22,8 @@ class ProductSerializer(serializers.ModelSerializer):
             "name_product",
             "price",
             "stock",
-            "category",
             "is_avaliable",
+            "category",
             "user",
         ]
         extra_kwargs = {
@@ -41,7 +41,7 @@ class ProductSerializer(serializers.ModelSerializer):
             not validated_data["user"].is_saller
             and not validated_data["user"].is_superuser
         ):
-            raise serializers.ValidationError({"details": "user  not a saller"})
+            raise serializers.ValidationError({"details": "User must be a seller"})
 
     def create(self, validated_data):
         category_obj = CategorySerializer.create_or_update_category(validated_data)
@@ -57,6 +57,8 @@ class ProductSerializer(serializers.ModelSerializer):
             setattr(instance, key, value)
         if "stock" in validated_data:
             instance.is_avaliable = ProductSerializer.stock_check(validated_data)
+        if "user" in validated_data:
+            ProductSerializer.issaller_check(validated_data)
         instance.save()
 
         return instance
