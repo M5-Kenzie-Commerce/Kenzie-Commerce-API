@@ -4,6 +4,17 @@ from products.serializers import ProductSerializer
 
 
 class ShoppingCartSerializer(serializers.ModelSerializer):
+    def update(self, instance: CartProduct, validated_data: dict):
+        if validated_data["amount"] == 0:
+            instance.delete()
+
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+
+        instance.save()
+
+        return instance
+
     product = ProductSerializer
 
     class Meta:
