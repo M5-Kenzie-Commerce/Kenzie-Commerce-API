@@ -30,13 +30,13 @@ class ProductSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         product_category = validated_data.pop("category")
         category_exist = Category.objects.filter(
-            category_name__icontains=product_category["category_name"].lower()
+            category__icontains=product_category["category"].lower()
         )
         category_obj = (
             category_exist.first()
             if category_exist.exists()
             else Category.objects.create(
-                category_name=product_category["category_name"].lower()
+                category=product_category["category"].lower()
             )
         )
         if validated_data["stock"] == 0:

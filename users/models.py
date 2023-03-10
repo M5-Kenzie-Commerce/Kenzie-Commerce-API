@@ -11,6 +11,9 @@ class OrderStatusChoices(models.TextChoices):
 
 
 class User(AbstractUser):
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=60)
