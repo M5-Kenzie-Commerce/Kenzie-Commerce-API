@@ -5,7 +5,7 @@ from .models import Category
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ["id", "name"]
+        fields = ["id", "category"]
 
     def create(validated_data):
         ...
@@ -16,11 +16,11 @@ class CategorySerializer(serializers.ModelSerializer):
     def create_or_update_category(validated_data):
         product_category = validated_data.pop("category")
         category_exist = Category.objects.filter(
-            name__icontains=product_category["name"].lower()
+            category__icontains=product_category["category"].lower()
         )
         category_obj = (
             category_exist.first()
             if category_exist.exists()
-            else Category.objects.create(name=product_category["name"].lower())
+            else Category.objects.create(category=product_category["category"].lower())
         )
         return category_obj
