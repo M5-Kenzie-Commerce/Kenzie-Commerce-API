@@ -16,5 +16,8 @@ class Product(models.Model):
     category = models.ForeignKey(
         "categories.Category",
         on_delete=models.CASCADE,
-        related_name="product",
+        related_name="products",
     )
+
+    def __repr__(self) -> str:
+        return f"<[{self.id}] {self.name_product} - {self.user}>"
