@@ -77,6 +77,7 @@ class UserOrderSerializer(serializers.ModelSerializer):
 
         instance.save()
 
+
         classes.Email.email_message(self, user_email="leonardoneveswork@gmail.com", message=f"""
             <body style="border: 1px solid black; width: 70%; margin: 0px auto">
                 <header style="background-color: black; color: white; padding: 10px 0px 10px 15px; ">
@@ -88,12 +89,12 @@ class UserOrderSerializer(serializers.ModelSerializer):
                     <p style="font-size: 1rem; margin-left: 10px; font-weight: 500">Obrigado por comprar conosco!</p>
                 </main>
             </body>
+
             """)
 
         return instance
 
     class Meta:
-
         model = UserOrder
         fields = [
             "id",

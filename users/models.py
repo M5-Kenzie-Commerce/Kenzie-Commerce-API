@@ -50,7 +50,9 @@ class UserOrder(models.Model):
     )
 
     order_status = models.CharField(
-        max_length=30, choices=OrderStatusChoices.choices, default=OrderStatusChoices.order_placed
+        max_length=30,
+        choices=OrderStatusChoices.choices,
+        default=OrderStatusChoices.order_placed,
     )
 
     ordered_at = models.DateTimeField(auto_now_add=True)
