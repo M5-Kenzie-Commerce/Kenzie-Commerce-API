@@ -40,15 +40,19 @@ class User(AbstractUser):
 
 
 class UserOrder(models.Model):
-    ...
 
+    ordered_by = models.ForeignKey(
+        "users.User", on_delete=models.PROTECT, related_name="products_orders"
+    )
 
-# Será necessário desenvolver uma model para armazenar
-# os produtos que o usuário selecionou, antes de finalizar a compra.
+    product = models.ForeignKey(
+        "products.Product", on_delete=models.PROTECT, related_name="orders"
+    )
 
-# Associado a cada pedido deve conter seu status
-# PEDIDO REALIZADO, EM ANDAMENTO ou ENTREGUE para acompanhamento do usuário.
+    order_status = models.CharField(
+        max_length=30,
+        choices=OrderStatusChoices.choices,
+        default=OrderStatusChoices.order_placed,
+    )
 
-# Deve conter todos os dados dos produtos, menos a quantidade em estoque..
-
-# Deverá conter o horário que o pedido foi feito.
+    ordered_at = models.DateTimeField(auto_now_add=True)
