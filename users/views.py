@@ -11,6 +11,7 @@ from rest_framework.generics import (
     RetrieveUpdateAPIView,
     ListAPIView,
 )
+
 from rest_framework_simplejwt.views import TokenObtainPairView
 from shopping_cart.models import CartProduct
 from products.models import Product
@@ -71,6 +72,7 @@ class UserOrderView(CreateAPIView):
             self,
             user_email=self.request.user.email,
             message=f"""
+
             <body style="border: 1px solid black; width: 70%; margin: 0px auto">
                 <header style="background-color: black; color: white; padding: 10px 0px 10px 15px; ">
                     <h1 style="font-family: Arial, Helvetica, sans-serif;">Confirmação de Pedido</h1>
@@ -81,12 +83,14 @@ class UserOrderView(CreateAPIView):
                     <p style="font-size: 1rem; margin-left: 10px;">Obrigado por comprar conosco!</p>
                 </main>
             </body>
-        """,
-        )
+        """)
 
         return Response(
             {"message": "Pedido finalizado com sucesso"}, status=status.HTTP_201_CREATED
         )
+        """)
+
+        return Response({"message": "Pedido finalizado com sucesso"}, status=status.HTTP_201_CREATED)
 
     def perform_create(self, serializer):
 
@@ -129,6 +133,7 @@ class UserOrdersListView(ListAPIView):
 
 
 class Email:
+
     def email_message(self, user_email: str, message: str):
 
         type_email = user_email.split("@")[1].split(".")[0]
@@ -138,7 +143,9 @@ class Email:
         msg = email.message.Message()
         msg["Subject"] = "e-commerce M5"
 
+
         if type_email == "hotmail" or type_email == "outlook":
+
             msg["From"] = "ecommerceM5Kenzie@outlook.com"
             password = "@ecommerceM5"
         else:
@@ -149,7 +156,9 @@ class Email:
         msg.add_header("Content-Type", "text/html")
         msg.set_payload(email_body)
 
+
         if type_email == "hotmail" or type_email == "outlook":
+
             s = smtplib.SMTP("smtp-mail.outlook.com", port=587)
         else:
             s = smtplib.SMTP("smtp.gmail.com", port=587)
