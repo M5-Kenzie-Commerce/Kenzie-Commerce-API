@@ -37,8 +37,8 @@ class ProductSerializer(serializers.ModelSerializer):
         return True
 
     def create(self, validated_data):
-        category_obj = CategorySerializer.create_or_update_category(validated_data)
         get_object_or_404(User.objects.all(), email=validated_data["user"])
+        category_obj = CategorySerializer.create_or_update_category(validated_data)
         validated_data["is_avaliable"] = ProductSerializer.stock_check(validated_data)
         return Product.objects.create(**validated_data, category=category_obj)
 
