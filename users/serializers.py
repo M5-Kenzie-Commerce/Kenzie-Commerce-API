@@ -19,8 +19,6 @@ class UserSerializer(serializers.ModelSerializer):
             "username",
             "is_superuser",
             "is_saller",
-            "createdAt",
-            "updatedAt",
             "address",
             "cart_id",
             "password",
@@ -28,8 +26,6 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "password": {"write_only": True},
             "cart_id": {"read_only": True},
-            "createdAt": {"read_only": True},
-            "updatedAt": {"read_only": True},
         }
 
     def create(self, validated_data):
@@ -77,8 +73,10 @@ class UserOrderSerializer(serializers.ModelSerializer):
 
         instance.save()
 
-
-        classes.Email.email_message(self, user_email="leonardoneveswork@gmail.com", message=f"""
+        classes.Email.email_message(
+            self,
+            user_email="leonardoneveswork@gmail.com",
+            message=f"""
             <body style="border: 1px solid black; width: 70%; margin: 0px auto">
                 <header style="background-color: black; color: white; padding: 10px 0px 10px 15px; ">
                     <h1 style="font-family: Arial, Helvetica, sans-serif;">Atualização do Pedido</h1>
@@ -89,20 +87,15 @@ class UserOrderSerializer(serializers.ModelSerializer):
                     <p style="font-size: 1rem; margin-left: 10px; font-weight: 500">Obrigado por comprar conosco!</p>
                 </main>
             </body>
-
-            """)
+            """,
+        )
 
         return instance
 
     class Meta:
+
         model = UserOrder
-        fields = [
-            "id",
-            "order_status",
-            "ordered_at",
-            "product",
-            "ordered_by"
-        ]
+        fields = ["id", "order_status", "ordered_at", "product", "ordered_by"]
         read_only_fields = [
             "id",
             "ordered_at",
