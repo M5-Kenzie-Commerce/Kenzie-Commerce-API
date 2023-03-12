@@ -37,13 +37,16 @@ class ProductSerializer(serializers.ModelSerializer):
         return True
 
     def create(self, validated_data):
-        get_object_or_404(User.objects.all(), email=validated_data["user"])
+        validated_data["user"] = get_object_or_404(
+            User.objects.all(), email=validated_data["user"]
+        )
         category_obj = CategorySerializer.create_or_update_category(validated_data)
         validated_data["is_avaliable"] = ProductSerializer.stock_check(validated_data)
         return Product.objects.create(**validated_data, category=category_obj)
 
     def update(self, instance: Product, validated_data: dict) -> Product:
-        get_object_or_404(User.objects.all(), email=validated_data["user"])
+        if "user" in validated_data:
+            instance.user.delete()
         if "category" in validated_data:
             category_obj = CategorySerializer.create_or_update_category(validated_data)
             instance.category = category_obj
