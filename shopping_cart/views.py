@@ -1,7 +1,7 @@
 from .models import CartProduct, Cart
 from .serializers import ShoppingCartSerializer, CartSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView
 from django.shortcuts import get_object_or_404
 from products.models import Product
 
@@ -22,7 +22,17 @@ class ShoppingCart(CreateAPIView):
         serializer.save(product=product_id, cart=cart_id)
 
 
-class CartDetailView(RetrieveUpdateDestroyAPIView):
+class ShoppingCartUpdateView(UpdateAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = []
+
+    queryset = CartProduct.objects.all()
+    serializer_class = ShoppingCartSerializer
+
+    lookup_url_kwarg = "shopping_cart_id"
+
+
+class CartDetailView(RetrieveAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = []
 
