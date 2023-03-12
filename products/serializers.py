@@ -4,7 +4,6 @@ from categories.models import Category
 from categories.serializers import CategorySerializer
 from django.shortcuts import get_object_or_404
 from users.models import User
-from users.serializers import UserSerializer
 
 # Deverá ter um estoque dos itens,
 # quando o item estiver com 0 unidades deverá ter um campo
@@ -41,10 +40,13 @@ class ProductSerializer(serializers.ModelSerializer):
             User.objects.all(), email=validated_data["user"]
         )
         category_obj = CategorySerializer.create_or_update_category(validated_data)
+
         validated_data["is_avaliable"] = ProductSerializer.stock_check(validated_data)
+
         return Product.objects.create(**validated_data, category=category_obj)
 
     def update(self, instance: Product, validated_data: dict) -> Product:
+
         if "user" in validated_data:
             instance.user.delete()
         if "category" in validated_data:
@@ -54,6 +56,7 @@ class ProductSerializer(serializers.ModelSerializer):
             instance.is_avaliable = ProductSerializer.stock_check(validated_data)
         for key, value in validated_data.items():
             setattr(instance, key, value)
+
         instance.save()
 
         return instance
