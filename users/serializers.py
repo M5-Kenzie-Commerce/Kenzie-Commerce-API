@@ -19,6 +19,8 @@ class UserSerializer(serializers.ModelSerializer):
             "username",
             "is_superuser",
             "is_saller",
+            "createdAt",
+            "updatedAt",
             "address",
             "cart_id",
             "password",
@@ -26,6 +28,8 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "password": {"write_only": True},
             "cart_id": {"read_only": True},
+            "createdAt": {"read_only": True},
+            "updatedAt": {"read_only": True},
         }
 
     def create(self, validated_data):
