@@ -36,29 +36,21 @@ class ProductSerializer(serializers.ModelSerializer):
             return False
         return True
 
-    def issaller_check(validated_data):
-        if (
-            not validated_data["user"].is_saller
-            and not validated_data["user"].is_superuser
-        ):
-            raise serializers.ValidationError({"details": "User must be a seller"})
-
     def create(self, validated_data):
+        get_object_or_404(User.objects.all(), email=validated_data["user"])
         category_obj = CategorySerializer.create_or_update_category(validated_data)
-        ProductSerializer.issaller_check(validated_data)
         validated_data["is_avaliable"] = ProductSerializer.stock_check(validated_data)
         return Product.objects.create(**validated_data, category=category_obj)
 
     def update(self, instance: Product, validated_data: dict) -> Product:
+        get_object_or_404(User.objects.all(), email=validated_data["user"])
         if "category" in validated_data:
             category_obj = CategorySerializer.create_or_update_category(validated_data)
             instance.category = category_obj
-        for key, value in validated_data.items():
-            setattr(instance, key, value)
         if "stock" in validated_data:
             instance.is_avaliable = ProductSerializer.stock_check(validated_data)
-        if "user" in validated_data:
-            ProductSerializer.issaller_check(validated_data)
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
         instance.save()
 
         return instance
