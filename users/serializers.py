@@ -79,7 +79,7 @@ class UserOrderSerializer(serializers.ModelSerializer):
 
         classes.Email.email_message(
             self,
-            user_email="leonardoneveswork@gmail.com",
+            user_email=instance.ordered_by.email,
             message=f"""
             <body style="border: 1px solid black; width: 70%; margin: 0px auto">
                 <header style="background-color: black; color: white; padding: 10px 0px 10px 15px; ">
