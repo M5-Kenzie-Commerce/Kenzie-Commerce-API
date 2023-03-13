@@ -50,7 +50,9 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def update(self, instance: Product, validated_data: dict) -> Product:
         if "user" in validated_data:
-            validated_data.pop("user")
+            raise serializers.ValidationError(
+                {"detail": "product owner cannot be changed"}
+            )
         if "category" in validated_data:
             category_obj = CategorySerializer.create_or_update_category(validated_data)
             instance.category = category_obj
