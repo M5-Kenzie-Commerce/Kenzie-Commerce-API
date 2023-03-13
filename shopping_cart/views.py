@@ -41,5 +41,5 @@ class CartDetailView(RetrieveAPIView):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
 
-    lookup_url_kwarg = "shopping_cart_id"
+    lookup_url_kwarg = "cart_id"
 
