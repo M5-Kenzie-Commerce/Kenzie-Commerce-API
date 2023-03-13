@@ -4,11 +4,13 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView
 from django.shortcuts import get_object_or_404
 from products.models import Product
+from rest_framework.permissions import IsAuthenticated
+from .permissions import IsCartOwnerOrAdminToShoppingCart, IsCartOwnerOrAdminToCart
 
 
 class ShoppingCart(CreateAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
     queryset = CartProduct.objects.all()
     serializer_class = ShoppingCartSerializer
@@ -24,7 +26,7 @@ class ShoppingCart(CreateAPIView):
 
 class ShoppingCartUpdateView(UpdateAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = []
+    permission_classes = [IsCartOwnerOrAdminToShoppingCart]
 
     queryset = CartProduct.objects.all()
     serializer_class = ShoppingCartSerializer
@@ -34,7 +36,7 @@ class ShoppingCartUpdateView(UpdateAPIView):
 
 class CartDetailView(RetrieveAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = []
+    permission_classes = [IsCartOwnerOrAdminToCart]
 
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
