@@ -1,9 +1,9 @@
 from rest_framework import serializers
 from .models import Product
-from categories.models import Category
 from categories.serializers import CategorySerializer
 from django.shortcuts import get_object_or_404
 from users.models import User
+
 
 # Deverá ter um estoque dos itens,
 # quando o item estiver com 0 unidades deverá ter um campo
@@ -30,23 +30,25 @@ class ProductSerializer(serializers.ModelSerializer):
             "is_avaliable": {"read_only": True},
         }
 
-    def stock_check(validated_data):
-        if validated_data["stock"] == 0:
+    def stock_check(product):
+        if product["stock"] == 0:
             return False
         return True
 
-    def create(self, validated_data):
-        validated_data["user"] = get_object_or_404(
+    def saller_check(user):
+        return user.is_saller or user.is_superuser
+
+    def create(self, validated_data: Product):
+        product_user = get_object_or_404(
             User.objects.all(), email=validated_data["user"]
         )
+        if not ProductSerializer.saller_check(product_user):
+            raise serializers.ValidationError({"detail": "User not a saller"})
         category_obj = CategorySerializer.create_or_update_category(validated_data)
-
         validated_data["is_avaliable"] = ProductSerializer.stock_check(validated_data)
-
         return Product.objects.create(**validated_data, category=category_obj)
 
     def update(self, instance: Product, validated_data: dict) -> Product:
-
         if "user" in validated_data:
             validated_data.pop("user")
         if "category" in validated_data:
