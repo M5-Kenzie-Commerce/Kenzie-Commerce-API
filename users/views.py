@@ -1,15 +1,17 @@
 from jsonschema import ValidationError
 from .models import User, UserOrder
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from .serializers import UserSerializer, UserOrderSerializer
-from .permissions import UserPermission
+from .permissions import UserPermission, SallerPermission
 from rest_framework.generics import (
     ListCreateAPIView,
     CreateAPIView,
     RetrieveUpdateDestroyAPIView,
     RetrieveUpdateAPIView,
     ListAPIView,
+    UpdateAPIView
+    
 )
 from rest_framework_simplejwt.views import TokenObtainPairView
 from shopping_cart.models import CartProduct
@@ -56,13 +58,18 @@ class UserOrderView(CreateAPIView):
             product_validation = Product.objects.get(id=products["product_id"])
 
             if product_validation.stock < products["amount"]:
-                raise ValidationError("Não há quantidade disponível no estoque")
+                raise ValidationError("The product's amount is not avaliable")
 
             if not product_validation.is_avaliable:
-                raise ValidationError("O produto não está disponível")
+                raise ValidationError("The product is not avaliable")
 
+            product_validation.stock -= products["amount"]
+            product_validation.save()
             serializer = self.get_serializer(data=products)
             serializer.is_valid(raise_exception=True)
+
+            self.produts_ordered.append(product_validation)
+            
             self.perform_create(serializer)
 
         cart_products_list.delete()
@@ -85,7 +92,7 @@ class UserOrderView(CreateAPIView):
         )
 
         return Response(
-            {"message": "Pedido finalizado com sucesso"}, status=status.HTTP_201_CREATED
+            {"message": "request completed successfully"}, status=status.HTTP_201_CREATED
         )
 
     def perform_create(self, serializer):
@@ -94,10 +101,10 @@ class UserOrderView(CreateAPIView):
             serializer.save(product=products, ordered_by=self.order_by)
 
 
-class UserOrderDetailView(RetrieveUpdateAPIView):
+class UserOrderUpdate(UpdateAPIView):
 
     authentication_classes = [JWTAuthentication]
-    permission_classes = [UserPermission]
+    permission_classes = [SallerPermission]
 
     lookup_url_kwarg = "order_id"
 
@@ -105,27 +112,31 @@ class UserOrderDetailView(RetrieveUpdateAPIView):
     serializer_class = UserOrderSerializer
 
 
-class UserOrdersListView(ListAPIView):
+class ListOrders(ListAPIView):
 
-    lookup_url_kwarg = "user_id"
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
-    queryset = None
     serializer_class = UserOrderSerializer
 
-    def list(self, request, *args, **kwargs):
+    def get_queryset(self):
 
-        orders_user_list = UserOrder.objects.filter(ordered_by=self.kwargs["user_id"])
-        self.queryset = orders_user_list
+        if not self.request.user.is_superuser:
+            return UserOrder.objects.filter(ordered_by=self.request.user)
 
-        queryset = self.filter_queryset(self.get_queryset())
+        else:
+            return UserOrder.objects.all()
 
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
 
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+class ListProductsOrdered(ListAPIView):
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    serializer_class = UserOrderSerializer
+
+    def get_queryset(self):
+        return UserOrder.objects.filter(product__user=self.request.user)
 
 
 class Email:
