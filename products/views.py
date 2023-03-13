@@ -7,7 +7,6 @@ from rest_framework.generics import (
 )
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from categories.models import Category
 
 
 class ProductsView(ListCreateAPIView):

@@ -1,19 +1,16 @@
 from jsonschema import ValidationError
 from .models import User, UserOrder
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer, UserOrderSerializer
 from .permissions import UserPermission, SallerPermission
 from rest_framework.generics import (
     ListCreateAPIView,
     CreateAPIView,
     RetrieveUpdateDestroyAPIView,
-    RetrieveUpdateAPIView,
     ListAPIView,
-    UpdateAPIView
-    
+    UpdateAPIView 
 )
-from rest_framework_simplejwt.views import TokenObtainPairView
 from shopping_cart.models import CartProduct
 from products.models import Product
 from rest_framework.views import Response, status

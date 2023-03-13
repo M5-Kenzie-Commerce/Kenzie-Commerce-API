@@ -1,4 +1,3 @@
-from rest_framework.validators import UniqueValidator
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 import uuid
