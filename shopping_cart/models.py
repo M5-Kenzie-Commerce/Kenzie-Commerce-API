@@ -26,3 +26,4 @@ class CartProduct(models.Model):
     )
 
     amount = models.PositiveIntegerField()
+    createdAt = models.DateTimeField(auto_now_add=True)
