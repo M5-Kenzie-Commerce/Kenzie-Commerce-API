@@ -43,7 +43,7 @@ class ProductSerializer(serializers.ModelSerializer):
             User.objects.all(), email=validated_data["user"]
         )
         if not ProductSerializer.saller_check(product_user):
-            raise serializers.ValidationError({"detail": "User not a saller"})
+            raise serializers.ValidationError({"detail": "user not a saller"})
         category_obj = CategorySerializer.create_or_update_category(validated_data)
         validated_data["is_avaliable"] = ProductSerializer.stock_check(validated_data)
         return Product.objects.create(**validated_data, category=category_obj)
@@ -53,13 +53,15 @@ class ProductSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {"detail": "product owner cannot be changed"}
             )
+        if "name" in validated_data:
+            raise serializers.ValidationError(
+                {"detail": "product name cannot be changed"}
+            )
         if "category" in validated_data:
             category_obj = CategorySerializer.create_or_update_category(validated_data)
             instance.category = category_obj
         if "stock" in validated_data:
             instance.is_avaliable = ProductSerializer.stock_check(validated_data)
-        for key, value in validated_data.items():
-            setattr(instance, key, value)
 
         instance.save()
 
