@@ -42,4 +42,3 @@ class CartDetailView(RetrieveAPIView):
     serializer_class = CartSerializer
 
     lookup_url_kwarg = "cart_id"
-
