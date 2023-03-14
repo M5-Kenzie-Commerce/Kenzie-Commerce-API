@@ -1,5 +1,9 @@
 # Kenzie-Commerce-API
 
+Kenzie commerce é uma api com o objetivo de gerenciar um e-commerce, onde possui as funcionalidades de CRUD de usuários, produtos, pedidos e carrinho.
+
+API DOC: https://kenzie-commerce-api-production.up.railway.app/api/docs/redoc/
+
 ## Tabela de Conteúdos
 
 - [Visão Geral](#1-visão-geral)
@@ -464,7 +468,6 @@ Content-type: application/json
 | GET      | /api/products/    | Lista todos os produtos.                 |
 | GET      | /api/products/:product_id    | Lista produto por Id.                 |
 | PATCH    | /api/product/:product_id/     | Editar as informações de um produto usando seu ID como parâmetro.   |
-| DELETE    | /api/product/:product_id/     | Deleta um produto usando seu ID como parâmetro.   
 
 ---
 
@@ -518,6 +521,7 @@ Content-type: application/json
 |----------------|-----------|
 | 400 Bad request   |This field is required. (Invalid body) |
 | 401 Unauthorized   | Authentication credentials were not provided. |
+| 403 Forbiden   | You do not have permission to perform this action. |
 | 404 Not Found   | User not found.  |
 
 ---
@@ -581,7 +585,6 @@ Vazio
 | Código do Erro | Descrição |
 |----------------|-----------|
 | 401 Unauthorized   | Authentication credentials were not provided. |
-| 403 Forbiden   | Missing admin authorization. |
 
 ---
 
@@ -721,7 +724,6 @@ Vazio
 ### Possíveis Erros:
 | Código do Erro | Descrição |
 |----------------|-----------|
-| 401 Unauthorized   | Authentication credentials were not provided. |
 | 404 Not Found   | Not found. |
 
 ---
