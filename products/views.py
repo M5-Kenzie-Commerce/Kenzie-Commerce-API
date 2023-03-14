@@ -3,11 +3,10 @@ from .serializers import ProductSerializer
 from .permissions import ProductPermission
 from rest_framework.generics import (
     ListCreateAPIView,
-    RetrieveUpdateDestroyAPIView,
+    RetrieveUpdateAPIView,
 )
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from categories.models import Category
 
 
 class ProductsView(ListCreateAPIView):
@@ -36,7 +35,7 @@ class ProductsView(ListCreateAPIView):
         return queryset
 
 
-class ProductsDetailView(RetrieveUpdateDestroyAPIView):
+class ProductsDetailView(RetrieveUpdateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticatedOrReadOnly, ProductPermission]
 

@@ -5,12 +5,6 @@ from django.shortcuts import get_object_or_404
 from users.models import User
 
 
-# Deverá ter um estoque dos itens,
-# quando o item estiver com 0 unidades deverá ter um campo
-# indicando que o produto está indisponível.
-# Somente um vendendor pode cadastrar/alterar produtos
-
-
 class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
 

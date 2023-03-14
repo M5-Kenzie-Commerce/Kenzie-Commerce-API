@@ -1,4 +1,3 @@
-from rest_framework.validators import UniqueValidator
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 import uuid
@@ -22,7 +21,7 @@ class User(AbstractUser):
     )
     is_saller = models.BooleanField(default=False)
     createdAt = models.DateTimeField(auto_now_add=True)
-    updatedAt = models.DateTimeField(null=True)
+    updatedAt = models.DateTimeField(auto_now=True, null=True)
     is_superuser = models.BooleanField(default=False)
 
     address = models.OneToOneField(
@@ -54,5 +53,7 @@ class UserOrder(models.Model):
         choices=OrderStatusChoices.choices,
         default=OrderStatusChoices.order_placed,
     )
+
+    amount = models.PositiveIntegerField()
 
     ordered_at = models.DateTimeField(auto_now_add=True)

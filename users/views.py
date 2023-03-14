@@ -1,24 +1,23 @@
 from jsonschema import ValidationError
 from .models import User, UserOrder
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer, UserOrderSerializer
 from .permissions import UserPermission, SallerPermission
 from rest_framework.generics import (
     ListCreateAPIView,
     CreateAPIView,
     RetrieveUpdateDestroyAPIView,
-    RetrieveUpdateAPIView,
     ListAPIView,
     UpdateAPIView
-    
 )
-from rest_framework_simplejwt.views import TokenObtainPairView
 from shopping_cart.models import CartProduct
 from products.models import Product
 from rest_framework.views import Response, status
 import smtplib
 import email.message
+import os
+import dotenv
 
 
 class UserView(ListCreateAPIView):
@@ -58,18 +57,23 @@ class UserOrderView(CreateAPIView):
             product_validation = Product.objects.get(id=products["product_id"])
 
             if product_validation.stock < products["amount"]:
-                raise ValidationError("The product's amount is not avaliable")
+                return Response({"detail": "The product's amount is not avaliable"}, status.HTTP_400_BAD_REQUEST)
 
             if not product_validation.is_avaliable:
-                raise ValidationError("The product is not avaliable")
+                return Response({"detail": "The product is not avaliable"}, status.HTTP_400_BAD_REQUEST)
 
             product_validation.stock -= products["amount"]
+
+            if product_validation.stock == 0:
+                product_validation.is_avaliable = False
+                product_validation.save()
+
             product_validation.save()
             serializer = self.get_serializer(data=products)
             serializer.is_valid(raise_exception=True)
 
             self.produts_ordered.append(product_validation)
-            
+
             self.perform_create(serializer)
 
         cart_products_list.delete()
@@ -82,7 +86,7 @@ class UserOrderView(CreateAPIView):
                 <header style="background-color: black; color: white; padding: 10px 0px 10px 15px; ">
                     <h1 style="font-family: Arial, Helvetica, sans-serif;">Confirmação de Pedido</h1>
                 </header>
-                <main style="background-color: whitesmoke;">
+                <main>
                     <p style="font-size: 1rem; margin-left: 10px;">Olá, {self.request.user.first_name}</p>
                     <p style="font-size: 1rem; margin-left: 10px;">Seu pedido foi gerado com sucesso. Agora estamos preparando os itens para envio e em breve você receberá mais informações.</p>
                     <p style="font-size: 1rem; margin-left: 10px;">Obrigado por comprar conosco!</p>
@@ -98,7 +102,7 @@ class UserOrderView(CreateAPIView):
     def perform_create(self, serializer):
 
         for products in self.produts_ordered:
-            serializer.save(product=products, ordered_by=self.order_by)
+            serializer.save(product=products, ordered_by=self.order_by, amount=serializer._kwargs["data"]["amount"])
 
 
 class UserOrderUpdate(UpdateAPIView):
@@ -142,29 +146,20 @@ class ListProductsOrdered(ListAPIView):
 class Email:
     def email_message(self, user_email: str, message: str):
 
-        type_email = user_email.split("@")[1].split(".")[0]
+        dotenv.load_dotenv()
 
         email_body = message
 
         msg = email.message.Message()
         msg["Subject"] = "e-commerce M5"
-
-        if type_email == "hotmail" or type_email == "outlook":
-            msg["From"] = "ecommerceM5Kenzie@outlook.com"
-            password = "@ecommerceM5"
-        else:
-            msg["From"] = "ecommerceM5Kenzie@gmail.com"
-            password = "olaeuikctnryqbmp"
+        msg["From"] = os.getenv("EMAIL_HOST_USER")
+        password = os.getenv("EMAIL_HOST_PASSWORD")
 
         msg["To"] = user_email
         msg.add_header("Content-Type", "text/html")
         msg.set_payload(email_body)
 
-        if type_email == "hotmail" or type_email == "outlook":
-            s = smtplib.SMTP("smtp-mail.outlook.com", port=587)
-        else:
-            s = smtplib.SMTP("smtp.gmail.com", port=587)
-
+        s = smtplib.SMTP(os.getenv("EMAIL_HOST"), port=os.getenv("EMAIL_PORT"))
         s.starttls()
         s.login(msg["From"], password)
         s.sendmail(msg["From"], [msg["To"]], msg.as_string().encode("utf-8"))

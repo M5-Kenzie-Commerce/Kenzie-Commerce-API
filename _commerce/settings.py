@@ -29,9 +29,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["kenzie-commerce-api-production.up.railway.app", "0.0.0.0", "localhost"]
 
 RAILWAY_STATIC_URL = os.getenv("RAILWAY_STATIC_URL")
 
@@ -112,7 +112,6 @@ if DATABASE_URL:
 if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
 
 
 # Password validation

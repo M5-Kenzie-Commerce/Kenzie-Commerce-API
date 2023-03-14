@@ -13,7 +13,7 @@ class AddressSerializer(serializers.ModelSerializer):
             "street",
             "zip_code",
             "plus_information"
-            ]
+        ]
 
     def create(self, validated_data):
         return Address.objects.create(**validated_data)

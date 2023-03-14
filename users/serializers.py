@@ -42,6 +42,7 @@ class UserSerializer(serializers.ModelSerializer):
             return User.objects.create_superuser(
                 **validated_data,
                 address=address_obj,
+                cart=cart,
             )
 
         return User.objects.create_user(
@@ -99,11 +100,12 @@ class UserOrderSerializer(serializers.ModelSerializer):
     class Meta:
 
         model = UserOrder
-        fields = ["id", "order_status", "ordered_at", "product", "ordered_by"]
+        fields = ["id", "order_status", "ordered_at", "product", "ordered_by", "amount"]
         read_only_fields = [
             "id",
             "ordered_at",
             "product",
             "ordered_by",
+            "amount"
         ]
-        depth = 1
+        depth = 0
