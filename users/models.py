@@ -54,4 +54,6 @@ class UserOrder(models.Model):
         default=OrderStatusChoices.order_placed,
     )
 
+    amount = models.PositiveIntegerField()
+
     ordered_at = models.DateTimeField(auto_now_add=True)

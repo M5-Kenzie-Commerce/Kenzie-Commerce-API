@@ -7,5 +7,5 @@ urlpatterns = [
         "shopping_cart_up/<str:shopping_cart_id>/",
         views.ShoppingCartUpdateView.as_view(),
     ),
-    path("cart/<str:shopping_cart_id>/", views.CartDetailView.as_view()),
+    path("cart/<str:cart_id>/", views.CartDetailView.as_view()),
 ]
