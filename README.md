@@ -691,42 +691,7 @@ Vazio
 
 ---
 
-### 1.5. **Deletar produto por ID**
 
-### `DELETE /users/<product_id>` 
-
-### Exemplo de Request:
-```
-DELETE /api/users/f1fc0e0b-d84b-47a9-a86f-fcd899acf643
-Host: https://kenzie-commerce-api-production.up.railway.app
-Authorization: Bearer token
-Content-type: None
-```
-
-### Parâmetros da Requisição:
-| Parâmetro   | Tipo        | Descrição                             |
-|-------------|-------------|---------------------------------------|
-| product_id     | string      | Identificador único do produto (Product) |
-
-### Corpo da Requisição:
-```json
-Vazio
-```
-
-### Exemplo de Response:
-```
-204 No content
-```
-```json
-Vazio
-```
-
-### Possíveis Erros:
-| Código do Erro | Descrição |
-|----------------|-----------|
-| 404 Not Found   | Not found. |
-
----
 
 
 
