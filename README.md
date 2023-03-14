@@ -86,8 +86,8 @@ python manage.py runserver
 
 - [Users](#1-Users)
 - [Login](#2-Login)
-- [Orders](#3-Orders)
-- [Products](#4-Products)
+- [Products](#3-Products)
+- [Orders](#4-Orders)
 - [ShoppingCart](#5-ShoppingCart)
 
 ---
@@ -515,6 +515,8 @@ Content-type: application/json
 }
 ```
 
+O campo is_available não deve ser passado na requisição, será gerado automaticamente de acordo com a quantidade do estoque do produto.
+
 
 ### Possíveis Erros:
 | Código do Erro | Descrição |
@@ -643,7 +645,7 @@ Content-type: application/json
 
 ---
 
-### 1.3. **Listar produto por ID**
+### 3.4. **Listar produto por ID**
 
 ### `GET /api/products/<product_id>/`
 
@@ -691,7 +693,251 @@ Vazio
 
 ---
 
+## 4. **Orders**
+[ Voltar para o topo ](#tabela-de-conteúdos)
 
+### Endpoints
+
+| Método   | Rota       | Descrição                               |
+|----------|------------|-----------------------------------------|
+| POST     | /api/orders     | Criação de um pedido.                  |
+| GET      | /api/orders/user     | Lista todos os pedidos do usuário logado.  | 
+| GET    | /api/orders/product/list/     | Lista todos os produtos de um pedido.  | 
+| PATCH    | /api/orders/:order_id     | Editar as informações de um pedido usando seu ID como parâmetro.  |
+
+---
+
+### 4.1. **Criação de pedido** 
+
+### Exemplo de Request:
+```
+POST /api/orders
+Host: https://kenzie-commerce-api-production.up.railway.app
+Authorization: Bearer token
+Content-type: application/json
+```
+
+### Exemplo de Corpo da Requisição:
+```json
+Vazio
+```
+
+### Exemplo de Response:
+```
+201 Created
+```
+
+```json
+{
+	"message": "request completed successfully"
+}
+```
+
+### Possíveis Erros:
+| Código do Erro | Descrição |
+|----------------|-----------|
+| 401 Unauthorized   | Authentication credentials were not provided. |
+| 400 Bad Request  |  The product's amount is not avaliable  |
+
+---
+
+### 3.2. **Listando pedidos**
+
+### `GET /api/orders/` 
+
+### Exemplo de Request:
+```
+GET api/orders/
+Host: https://kenzie-commerce-api-production.up.railway.app
+Authorization: Bearer token
+Content-type: None
+```
+
+### Corpo da Requisição:
+```json
+Vazio
+```
+
+### Exemplo de Response:
+```
+200 OK
+```
+```json
+{
+	"count": 1,
+	"next": null,
+	"previous": null,
+	"results": [
+		{
+			"id": 2,
+			"order_status": "Pedido Realizado",
+			"ordered_at": "2023-03-14T20:43:59.531849Z",
+			"product": "1b97b08e-0dfe-43cb-a23e-5b0236954f79",
+			"ordered_by": {
+				"id": "42652d8f-c47e-4ea7-8c90-ab3a460b7e01",
+				"first_name": "Mitchell",
+				"last_name": "Mimi",
+				"email": "mitchell@gmail.com",
+				"username": "Mitchu",
+				"is_superuser": false,
+				"is_saller": false,
+				"createdAt": "2023-03-14T13:34:29.818991Z",
+				"updatedAt": null,
+				"address": {
+					"id": "2f174250-b861-4cc9-8407-06141498fdcc",
+					"state": "SP",
+					"city": "Campinas",
+					"district": "Taquaral",
+					"street": "R. Vasco Fernandes Coutinho",
+					"zip_code": "12345678",
+					"plus_information": "ao lado do parque"
+				},
+				"cart_id": "dab23a7d-c264-4352-bec8-97457f91d09e",
+				"amount": 1
+			}
+		}
+	]
+}
+```
+
+### Possíveis Erros:
+| Código do Erro | Descrição |
+|----------------|-----------|
+| 403 Forbiden   | Authentication credentials were not provided |
+
+---
+
+### 3.3. **Listando pedidos do usuário logado**
+
+### `GET /api/products/user/` 
+
+### Exemplo de Request:
+```
+GET /api/products/user/
+Host: https://kenzie-commerce-api-production.up.railway.app
+Authorization: Bearer token
+Content-type: None
+```
+
+### Corpo da Requisição:
+```json
+Vazio
+```
+
+### Exemplo de Response:
+```
+200 OK
+```
+```json
+{
+	"count": 1,
+	"next": null,
+	"previous": null,
+	"results": [
+		{
+			"id": 2,
+			"order_status": "Pedido Realizado",
+			"ordered_at": "2023-03-14T20:43:59.531849Z",
+			"product": "1b97b08e-0dfe-43cb-a23e-5b0236954f79",
+			"ordered_by": {
+				"id": "42652d8f-c47e-4ea7-8c90-ab3a460b7e01",
+				"first_name": "Mitchell",
+				"last_name": "Mimi",
+				"email": "mitchell@gmail.com",
+				"username": "Mitchu",
+				"is_superuser": false,
+				"is_saller": false,
+				"createdAt": "2023-03-14T13:34:29.818991Z",
+				"updatedAt": null,
+				"address": {
+					"id": "2f174250-b861-4cc9-8407-06141498fdcc",
+					"state": "SP",
+					"city": "Campinas",
+					"district": "Taquaral",
+					"street": "R. Vasco Fernandes Coutinho",
+					"zip_code": "12345678",
+					"plus_information": "ao lado do parque"
+				},
+				"cart_id": "dab23a7d-c264-4352-bec8-97457f91d09e",
+				"amount": 1
+			}
+		}
+	]
+}
+```
+
+### Possíveis Erros:
+| Código do Erro | Descrição |
+|----------------|-----------|
+| 403 Forbiden   | Authentication credentials were not provided |
+
+---
+
+### 3.4. **Listando todos os pedidos dos pedidos do vendedor logado**
+
+### `GET /api/product/list/` 
+
+### Exemplo de Request:
+```
+GET /api/product/list/
+Host: https://kenzie-commerce-api-production.up.railway.app
+Authorization: Bearer token
+Content-type: None
+```
+
+### Corpo da Requisição:
+```json
+Vazio
+```
+
+### Exemplo de Response:
+```
+200 OK
+```
+```json
+{
+	{
+	"count": 8,
+	"next": "http://localhost:8000/api/orders/product/list/?page=2",
+	"previous": null,
+	"results": [
+		{
+			"id": 1,
+			"order_status": "Pedido Realizado",
+			"ordered_at": "2023-03-14T16:47:34.338474Z",
+			"product": "dc58e29b-c286-4cb8-aa2f-55569a81e989",
+			"ordered_by": {
+				"id": "42652d8f-c47e-4ea7-8c90-ab3a460b7e01",
+				"first_name": "Mitchell",
+				"last_name": "Mimi",
+				"email": "mitchell1@gmail.com",
+				"username": "Mitchu-Mimi",
+				"is_superuser": false,
+				"is_saller": false,
+				"createdAt": "2023-03-14T13:34:29.818991Z",
+				"updatedAt": "2023-03-14T13:44:37.861476Z",
+				"address": {
+					"id": "2f174250-b861-4cc9-8407-06141498fdcc",
+					"state": "SP",
+					"city": "Campinas",
+					"district": "Taquaral",
+					"street": "R. Vasco Fernandes Coutinho",
+					"zip_code": "12345678",
+					"plus_information": "ao lado do parque"
+				},
+				"cart_id": "dab23a7d-c264-4352-bec8-97457f91d09e"
+			}
+		}
+	]
+}
+```
+
+### Possíveis Erros:
+| Código do Erro | Descrição |
+|----------------|-----------|
+| 403 Forbiden   | Authentication credentials were not provided |
+
+---
 
 
 
