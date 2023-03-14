@@ -9,7 +9,7 @@ from rest_framework.generics import (
     CreateAPIView,
     RetrieveUpdateDestroyAPIView,
     ListAPIView,
-    UpdateAPIView 
+    UpdateAPIView
 )
 from shopping_cart.models import CartProduct
 from products.models import Product
@@ -66,7 +66,7 @@ class UserOrderView(CreateAPIView):
             serializer.is_valid(raise_exception=True)
 
             self.produts_ordered.append(product_validation)
-            
+
             self.perform_create(serializer)
 
         cart_products_list.delete()

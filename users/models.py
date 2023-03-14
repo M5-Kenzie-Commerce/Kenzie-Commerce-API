@@ -21,7 +21,7 @@ class User(AbstractUser):
     )
     is_saller = models.BooleanField(default=False)
     createdAt = models.DateTimeField(auto_now_add=True)
-    updatedAt = models.DateTimeField(null=True)
+    updatedAt = models.DateTimeField(auto_now=True, null=True)
     is_superuser = models.BooleanField(default=False)
 
     address = models.OneToOneField(

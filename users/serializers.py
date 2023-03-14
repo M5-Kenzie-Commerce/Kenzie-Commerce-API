@@ -42,6 +42,7 @@ class UserSerializer(serializers.ModelSerializer):
             return User.objects.create_superuser(
                 **validated_data,
                 address=address_obj,
+                cart=cart,
             )
 
         return User.objects.create_user(
