@@ -19,7 +19,7 @@ Tecnologias usadas.
 - [Python](https://www.python.org/)
 - [Django Restframework SimpleJWT](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html)
 
-A URL base da aplicação: 
+A URL base da aplicação: https://kenzie-commerce-api-production.up.railway.app
 
 ---
 
@@ -95,22 +95,22 @@ python manage.py runserver
 
 | Método   | Rota       | Descrição                               |
 |----------|------------|-----------------------------------------|
-| POST     | /users     | Criação de um usuário.                  |
-| GET      | /users     | Lista todos os usuários                 |
-| GET      | /users/:user_id     | Lista um usuário usando seu ID como parâmetro |
-| PATCH    | /users/:user_id     | Editar as informações do usuário usando seu ID como parâmetro   |
-| DELETE    | /users/:user_id     | Deletar usuário usando seu ID como parâmetro   
+| POST     | /api/users     | Criação de um usuário.                  |
+| GET      | /api/users     | Lista todos os usuários                 |
+| GET      | /api/users/:user_id     | Lista um usuário usando seu ID como parâmetro |
+| PATCH    | /api/users/:user_id     | Editar as informações do usuário usando seu ID como parâmetro   |
+| DELETE    | /api/users/:user_id     | Deletar usuário usando seu ID como parâmetro   
 
 ---
 
 ### 1.1. **Criação de Usuário**
 
-### `POST/api/users/`
+### `POST /api/users/`
 
 ### Exemplo de Request:
 ```
-POST /users
-Host: 
+POST /api/users
+Host: https://kenzie-commerce-api-production.up.railway.app
 Authorization: None
 Content-type: application/json
 ```
@@ -118,24 +118,24 @@ Content-type: application/json
 ### Exemplo de Corpo da Requisição:
 ```json
 {
-      "email": "user@gmail.com",
-      "password": "userPassword",
-      "first_name": "User",
-      "last_name": "Newuser",
-      "username": "User1234",
-      "is_superuser": true,
-      "is_saller": false,
-      "address": {
-        "state": "SP",
-        "city": "São Paulo",
-        "district": "Jardins",
-        "street": "Holanda",
-        "zip_code": "12345678",
-        "plus_information": ""
+	"email": "mitchell@gmail.com",
+	"password": "mimi1234!",
+	"first_name": "Mitchell",
+	"last_name": "Mimi",
+	"username": "Mitchu",
+	"is_superuser": false,
+	"is_saller": false,
+	"address": {
+		"state": "SP",
+		"city": "Campinas",
+		"district": "Taquaral",
+		"street": "R. Vasco Fernandes Coutinho",
+		"zip_code": "12345678",
+		"plus_information": "ao lado do parque"
 	}
 }
 ```
-Campos opcionais: plus_infomation, is_saller
+Campos opcionais: plus_infomation e is_saller.
 
 ### Exemplo de Response:
 ```
@@ -144,27 +144,25 @@ Campos opcionais: plus_infomation, is_saller
 
 ```json
 {
-	{
-      "id": "92dcd8e3-9fe7-496a-873c-29215fd98720",
-      "first_name": "User",
-      "last_name": "Newuser",
-      "email": "user@gmail.com",
-      "username": "User1234",
-      "is_superuser": true,
-      "is_saller": false,
-      "createdAt": "2023-03-08T16:21:03.500714Z",
-	    "updatedAt": null,
-      "address": {
-        "id": "34723b86-f30b-454f-8e6a-18edd044746f",
-        "state": "SP",
-        "city": "São Paulo",
-        "district": "Jardins",
-        "street": "Holanda",
-        "zip_code": "12345678",
-        "plus_information": ""
-      },
-      "cart_id": "c329ddae-9fad-4f49-85a7-1a56f87e7348"
-}
+	"id": "42652d8f-c47e-4ea7-8c90-ab3a460b7e01",
+	"first_name": "Mitchell",
+	"last_name": "Mimi",
+	"email": "mitchell@gmail.com",
+	"username": "Mitchu",
+	"is_superuser": false,
+	"is_saller": false,
+	"createdAt": "2023-03-14T13:34:29.818991Z",
+	"updatedAt": null,
+	"address": {
+		"id": "2f174250-b861-4cc9-8407-06141498fdcc",
+		"state": "SP",
+		"city": "Campinas",
+		"district": "Taquaral",
+		"street": "R. Vasco Fernandes Coutinho",
+		"zip_code": "12345678",
+		"plus_information": "ao lado do parque"
+	},
+	"cart_id": "dab23a7d-c264-4352-bec8-97457f91d09e"
 }
 ```
 O campo password não deve ser retornado, os campos is_saller (possui o valor false como default), updatedAt, createdAt e id (do tipo uuid e gerado automaticamente no banco de dados) não são passados na requisição mas devem ser retornados na reposta.
@@ -180,12 +178,12 @@ Ao criar um usuário, um carrinho será criado e associado ao usuário automáti
 
 ### 1.2. **Listando Usuários**
 
-### `GET/api/users/` 
+### `GET /api/users/` 
 
 ### Exemplo de Request:
 ```
-GET/users
-Host: 
+GET /api/users
+Host: https://kenzie-commerce-api-production.up.railway.app
 Authorization: None
 Content-type: None
 ```
@@ -201,65 +199,65 @@ Vazio
 ```
 ```json
 {
-    "count": 5,
-    "next": null,
-    "previous": null,
-    "results": [
-        {
-           "id": "92dcd8e3-9fe7-496a-873c-29215fd98720",
-            "first_name": "User",
-            "last_name": "Newuser",
-            "email": "user@gmail.com",
-            "username": "User1234",
-            "is_superuser": true,
-            "is_saller": false,
-            "createdAt": "2023-03-08T16:21:03.500714Z",
-	          "updatedAt": null,
-            "address": {
-              "id": "34723b86-f30b-454f-8e6a-18edd044746f",
-              "state": "SP",
-              "city": "São Paulo",
-              "district": "Jardins",
-              "street": "Holanda",
-              "zip_code": "12345678",
-              "plus_information": ""
-            },
-            "cart_id": "c329ddae-9fad-4f49-85a7-1a56f87e7348"
-        },
-        {
-            "id": "1d12a854-0dc3-49f7-8852-623e3a956d55",
-            "first_name": "Gan",
-            "last_name": "dalf",
-            "email": "gandalf@gmail.com",
-            "username": "Gandalf14",
-            "is_superuser": false,
-            "is_saller": false,
-            "createdAt": "2023-03-08T16:21:03.500714Z",
-	          "updatedAt": null,
-            "address": {
-                "id": "53aa1fbc-2f09-4fea-a752-73c69bfe1cb6",
-                "state": "SP",
-                "city": "São Paulo",
-                "district": "Jardins",
-                "street": "França",
-                "zip_code": "12345678",
-                "plus_information": ""
-            },
-            "cart_id": "74b3fec3-b38f-47c8-a566-b8155cb820c9"
-        },
-    ]
+	"count": 8,
+	"next": "http://kenzie-commerce-api-production.up.railway.app/api/users/?page=2",
+	"previous": null,
+	"results": [
+		{
+			"id": "42652d8f-c47e-4ea7-8c90-ab3a460b7e01",
+			"first_name": "Mitchell",
+			"last_name": "Mimi",
+			"email": "mitchell@gmail.com",
+			"username": "Mitchu",
+			"is_superuser": false,
+			"is_saller": false,
+			"createdAt": "2023-03-14T13:34:29.818991Z",
+			"updatedAt": null,
+			"address": {
+				"id": "2f174250-b861-4cc9-8407-06141498fdcc",
+				"state": "SP",
+				"city": "Campinas",
+				"district": "Taquaral",
+				"street": "R. Vasco Fernandes Coutinho",
+				"zip_code": "12345678",
+				"plus_information": "ao lado do parque"
+			},
+			"cart_id": "dab23a7d-c264-4352-bec8-97457f91d09e"
+		},
+		{
+			"id": "4613b422-aae0-4411-bb4b-d8a0093c0542",
+			"first_name": "Flavia",
+			"last_name": "Saller",
+			"email": "flaviasaller@gmail.com",
+			"username": "flaviasaller",
+			"is_superuser": false,
+			"is_saller": true,
+			"createdAt": "2023-03-13T21:01:43.272202Z",
+			"updatedAt": null,
+			"address": {
+				"id": "90aea865-35ef-4aed-a5ad-2437b3c4cf18",
+				"state": "SP",
+				"city": "São Paulo",
+				"district": "Sé",
+				"street": "Rua dos Códigos, 337",
+				"zip_code": "12345678",
+				"plus_information": "Apto 524"
+			},
+			"cart_id": "dd4e87f4-7b7e-49f1-bfec-7d2fe81425db"
+		}
+	]
 }
 ```
 ---
 
 ### 1.3. **Listar Usuário por ID**
 
-### `GET/api/users/<user_id>/`
+### `GET /api/users/<user_id>/`
 
 ### Exemplo de Request:
 ```
-GET/api/users/92dcd8e3-9fe7-496a-873c-29215fd98720
-Host: 
+GET/api/users/42652d8f-c47e-4ea7-8c90-ab3a460b7e01
+Host: https://kenzie-commerce-api-production.up.railway.app
 Authorization: None
 Content-type: None
 ```
@@ -280,26 +278,26 @@ Vazio
 ```
 ```json
 {
-       "id": "92dcd8e3-9fe7-496a-873c-29215fd98720",
-       "first_name": "Hanzo",
-       "last_name": "Hanzo",
-       "email": "hanzo@gmail.com",
-       "username": "Hanzo",
-       "is_superuser": false,
-       "is_saller": false,
-       "createdAt": "2023-03-08T16:21:03.500714Z",
-	     "updatedAt": null,
-       "address": {
-         "id": "34723b86-f30b-454f-8e6a-18edd044746f",
-         "state": "SP",
-         "city": "Campinas",
-         "district": "Taquaral",
-         "street": "Guerra Junqueira",
-         "zip_code": "12345678",
-         "plus_information": ""
-        },
-        "cart_id": "c329ddae-9fad-4f49-85a7-1a56f87e7348"
- }
+	"id": "42652d8f-c47e-4ea7-8c90-ab3a460b7e01",
+	"first_name": "Mitchell",
+	"last_name": "Mimi",
+	"email": "mitchell@gmail.com",
+	"username": "Mitchu",
+	"is_superuser": false,
+	"is_saller": false,
+	"createdAt": "2023-03-14T13:34:29.818991Z",
+	"updatedAt": null,
+	"address": {
+		"id": "2f174250-b861-4cc9-8407-06141498fdcc",
+		"state": "SP",
+		"city": "Campinas",
+		"district": "Taquaral",
+		"street": "R. Vasco Fernandes Coutinho",
+		"zip_code": "12345678",
+		"plus_information": "ao lado do parque"
+	},
+	"cart_id": "dab23a7d-c264-4352-bec8-97457f91d09e"
+}
 ```
 
 ### Possíveis Erros:
@@ -311,12 +309,12 @@ Vazio
 
 ### 1.4. **Editar Usuário por ID**
 
-### `PATCH/api/users/<user_id>/`
+### `PATCH /api/users/<user_id>/`
 
 ### Exemplo de Request:
 ```
-PATCH/users/9cda28c9-e540-4b2c-bf0c-c90006d37893
-Host: 
+PATCH /api/users/42652d8f-c47e-4ea7-8c90-ab3a460b7e01
+Host: https://kenzie-commerce-api-production.up.railway.app
 Authorization: Bearer token
 Content-type: application/json
 ```
@@ -329,9 +327,8 @@ Content-type: application/json
 ### Corpo da Requisição:
 ```json
 {
-    "email": "hanzo15@gmail.com",
-    "first_name": "hanzo",
-    "last_name": "the cat"
+	"email": "mitchell1@gmail.com",
+	"username": "Mitchu-Mimi"
 }
 ```
 Todos os campos são opcionais. Campos que não podem ser editados: id, createdAt, UpdatedAt.
@@ -342,25 +339,25 @@ Todos os campos são opcionais. Campos que não podem ser editados: id, createdA
 ```
 ```json
 {
-    "id": "5b77936e-f69b-4fdc-a26f-10c5b0b79d66",
-    "first_name": "hanzo",
-    "last_name": "the cat",
-    "email": "hanzo15@gmail.com",
-    "username": "Hanzo",
-    "is_superuser": true,
-    "is_saller": false,
-    "createdAt": "2023-03-08T16:21:03.500714Z",
-    "updatedAt": "2023-03-12T15:52:41.298754Z",
-    "address": {
-           "id": "34723b86-f30b-454f-8e6a-18edd044746f",
-           "state": "SP",
-           "city": "Campinas",
-           "district": "Taquaral",
-           "street": "Guerra Junqueira",
-           "zip_code": "12345678",
-           "plus_information": ""
-          },
-          "cart_id": "c329ddae-9fad-4f49-85a7-1a56f87e7348"
+	"id": "42652d8f-c47e-4ea7-8c90-ab3a460b7e01",
+	"first_name": "Mitchell",
+	"last_name": "Mimi",
+	"email": "mitchell1@gmail.com",
+	"username": "Mitchu-Mimi",
+	"is_superuser": false,
+	"is_saller": false,
+	"createdAt": "2023-03-14T13:34:29.818991Z",
+	"updatedAt": "2023-03-14T13:44:37.861476Z",
+	"address": {
+		"id": "2f174250-b861-4cc9-8407-06141498fdcc",
+		"state": "SP",
+		"city": "Campinas",
+		"district": "Taquaral",
+		"street": "R. Vasco Fernandes Coutinho",
+		"zip_code": "12345678",
+		"plus_information": "ao lado do parque"
+	},
+	"cart_id": "dab23a7d-c264-4352-bec8-97457f91d09e"
 }
 ```
 
@@ -374,12 +371,12 @@ Todos os campos são opcionais. Campos que não podem ser editados: id, createdA
 
 ### 1.5. **Deletar Usuário por ID**
 
-### `DELETE/users/<user_id>` 
+### `DELETE api/users/<user_id>` 
 
 ### Exemplo de Request:
 ```
-DELETE/api/users/9cda28c9-e540-4b2c-bf0c-c90006d37893
-Host: 
+DELETE/api/users/42652d8f-c47e-4ea7-8c90-ab3a460b7e01
+Host: https://kenzie-commerce-api-production.up.railway.app
 Authorization: Bearer token
 Content-type: None
 ```
@@ -424,7 +421,7 @@ Vazio
 ### Exemplo de Request:
 ```
 POST/login
-Host: 
+Host: https://kenzie-commerce-api-production.up.railway.app
 Authorization: None
 Content-type: application/json
 ```
@@ -444,7 +441,8 @@ Content-type: application/json
 
 ```json
 {
-	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc0FkbSI6dHJ1ZSwiaWF0IjoxNjczNzg4MzQ5LCJleHAiOjE2NzM4NzQ3NDksInN1YiI6IjhjZTUxYjgxLTU5ODUtNDMzYy05MDg3LTg3MTQ3NmU3NjQyNSJ9.uxrYGh7bRtbNx_Kqk-ec7L3P1J5lBjGsXafQnaN1qzg"
+	"refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY3OTQwNjI3NiwiaWF0IjoxNjc4ODAxNDc2LCJqdGkiOiIzNzEwZDAwMWIwZTc0YzRiODdkNWEzOGUxZjE5ZGIxMSIsInVzZXJfaWQiOiI2YmFhNmQxYS1iNWNjLTQ2NTktYmJiNy02ODU0ZDVhYTllOTgifQ.inVyGxX46P5VXtOgNv3Tn8zVNDFMmVrdrA_AZwahWTA",
+	"access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc4ODU1NDc2LCJpYXQiOjE2Nzg4MDE0NzYsImp0aSI6IjQzODc4ZTMyN2I3NDQ4OTI5YmZkMTI2MzM5ZmZjZjdiIiwidXNlcl9pZCI6IjZiYWE2ZDFhLWI1Y2MtNDY1OS1iYmI3LTY4NTRkNWFhOWU5OCJ9.KHx27AQcEc8s3WleievZ_sWTOKf9kc9aHFwTN1-N3zk"
 }
 ```
 
@@ -462,10 +460,11 @@ Content-type: application/json
 
 | Método   | Rota       | Descrição                               |
 |----------|------------|-----------------------------------------|
-| POST     | /products/     | Criação de um produto.                  |
-| GET      | /products/    | Lista todos os produtos.                 |
-| PATCH    | /answers/:product_id/     | Editar as informações de um produto usando seu ID como parâmetro.   |
-| DELETE    | /answers/:answer_id/     | Deleta um produto usando seu ID como parâmetro.   
+| POST     | /api/products/     | Criação de um produto.                  |
+| GET      | /api/products/    | Lista todos os produtos.                 |
+| GET      | /api/products/:product_id    | Lista produto por Id.                 |
+| PATCH    | /api/product/:product_id/     | Editar as informações de um produto usando seu ID como parâmetro.   |
+| DELETE    | /api/product/:product_id/     | Deleta um produto usando seu ID como parâmetro.   
 
 ---
 
@@ -473,8 +472,8 @@ Content-type: application/json
 
 ### Exemplo de Request:
 ```
-POST/api/products/
-Host: 
+POST /api/products/
+Host: https://kenzie-commerce-api-production.up.railway.app
 Authorization: Bearer token
 Content-type: application/json
 ```
@@ -525,12 +524,12 @@ Content-type: application/json
 
 ### 3.2. **Listando produtos**
 
-### `GET/api/products` 
+### `GET /api/products` 
 
 ### Exemplo de Request:
 ```
-GET/answers
-Host: 
+GET /products
+Host: https://kenzie-commerce-api-production.up.railway.app
 Authorization: Bearer token
 Content-type: None
 ```
@@ -563,16 +562,16 @@ Vazio
 			"user": "077ecb07-abcb-4f6a-9afc-98ad924362f8"
 		},
 		{
-			"id": "ce3baf4f-060a-4450-9d69-aa93aab1e508",
-			"name_product": "Geladeira",
-			"price": 3229,
-			"stock": 28,
+			"id": "f1fc0e0b-d84b-47a9-a86f-fcd899acf643",
+			"name_product": "Xbox one",
+			"price": 1400.0,
+			"stock": 10,
 			"is_avaliable": true,
 			"category": {
-				"id": "04c0b134-e256-4fa5-834a-12610b41e3c1",
-				"category": "eletrodomesticos"
+				"id": "7f8c1692-ab46-4eba-a699-e6d03c074032",
+				"category": "eletronicos"
 			},
-			"user": "077ecb07-abcb-4f6a-9afc-98ad924362f8"
+			"user": "efde725b-cbe2-45e2-b87a-8db7a6128ca5"
 		}
 	]
 }
@@ -585,3 +584,147 @@ Vazio
 | 403 Forbiden   | Missing admin authorization. |
 
 ---
+
+### 3.3. **Editar produto por ID** 
+
+### `PATCH /api/products/<product_id>`
+
+### Exemplo de Request:
+```
+PATCH /api/products/bc9a9325-08e6-4e8a-909b-26345b04eee7
+Host: https://kenzie-commerce-api-production.up.railway.app
+Authorization: Bearer token
+Content-type: application/json
+```
+
+### Parâmetros da Requisição:
+| Parâmetro   | Tipo        | Descrição                             |
+|-------------|-------------|---------------------------------------|
+| product_id     | string      | Identificador único do produto (Product) |
+
+### Exemplo de Corpo da Requisição:
+```json
+{
+	"stock": 20,
+	"price": 5000
+}
+```
+
+### Exemplo de Response:
+```
+200 OK
+```
+
+```json
+{
+	"id": "bc9a9325-08e6-4e8a-909b-26345b04eee7",
+	"name_product": "Xbox one",
+	"price": 5000.0,
+	"stock": 20,
+	"is_avaliable": true,
+	"category": {
+		"id": "7f8c1692-ab46-4eba-a699-e6d03c074032",
+		"category": "eletronicos"
+	},
+	"user": "6baa6d1a-b5cc-4659-bbb7-6854d5aa9e98"
+}
+```
+
+
+### Possíveis Erros:
+| Código do Erro | Descrição |
+|----------------|-----------|
+| 401 Unauthorized   | Authentication credentials were not provided. |
+| 403 Forbiden   | You do not have permission to perform this action. |
+| 404 Not Found   | Not found.  |
+
+---
+
+### 1.3. **Listar produto por ID**
+
+### `GET /api/products/<product_id>/`
+
+### Exemplo de Request:
+```
+GET /api/products/f1fc0e0b-d84b-47a9-a86f-fcd899acf643
+Host: https://kenzie-commerce-api-production.up.railway.app
+Authorization: None
+Content-type: None
+```
+
+### Parâmetros da Requisição:
+| Parâmetro   | Tipo        | Descrição                             |
+|-------------|-------------|---------------------------------------|
+| product_id     | string      | Identificador único do produto (Product) |
+
+### Corpo da Requisição:
+```json
+Vazio
+```
+
+### Exemplo de Response:
+```
+200 OK
+```
+```json
+{
+	"id": "f1fc0e0b-d84b-47a9-a86f-fcd899acf643",
+	"name_product": "Xbox one",
+	"price": 1400.0,
+	"stock": 10,
+	"is_avaliable": true,
+	"category": {
+		"id": "7f8c1692-ab46-4eba-a699-e6d03c074032",
+		"category": "eletronicos"
+	},
+	"user": "efde725b-cbe2-45e2-b87a-8db7a6128ca5"
+}
+```
+
+### Possíveis Erros:
+| Código do Erro | Descrição |
+|----------------|-----------|
+| 404 Not Found   | Not found. |
+
+---
+
+### 1.5. **Deletar produto por ID**
+
+### `DELETE /users/<product_id>` 
+
+### Exemplo de Request:
+```
+DELETE /api/users/f1fc0e0b-d84b-47a9-a86f-fcd899acf643
+Host: https://kenzie-commerce-api-production.up.railway.app
+Authorization: Bearer token
+Content-type: None
+```
+
+### Parâmetros da Requisição:
+| Parâmetro   | Tipo        | Descrição                             |
+|-------------|-------------|---------------------------------------|
+| product_id     | string      | Identificador único do produto (Product) |
+
+### Corpo da Requisição:
+```json
+Vazio
+```
+
+### Exemplo de Response:
+```
+204 No content
+```
+```json
+Vazio
+```
+
+### Possíveis Erros:
+| Código do Erro | Descrição |
+|----------------|-----------|
+| 401 Unauthorized   | Authentication credentials were not provided. |
+| 404 Not Found   | Not found. |
+
+---
+
+
+
