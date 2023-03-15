@@ -939,5 +939,296 @@ Vazio
 
 ---
 
+### 3.3. **Editar pedido por ID** 
+
+### `PATCH /api/orders/:order_id/`
+
+### Exemplo de Request:
+```
+PATCH /api/orders/32
+Host: https://kenzie-commerce-api-production.up.railway.app
+Authorization: Bearer token
+Content-type: application/json
+```
+
+### Parâmetros da Requisição:
+| Parâmetro   | Tipo        | Descrição                             |
+|-------------|-------------|---------------------------------------|
+| order_id     | string      | Identificador único do pedido (Order) |
+
+### Exemplo de Corpo da Requisição:
+```json
+{
+	"order_status": "Entregue"
+}
+```
+
+### Exemplo de Response:
+```
+200 OK
+```
+
+```json
+{
+	"id": 32,
+	"order_status": "Entregue",
+	"ordered_at": "2019-08-24T14:15:22Z",
+	"product": "e0588024-d851-42d5-ab9f-1b664ef352d4",
+	"ordered_by": {
+		"id": "42652d8f-c47e-4ea7-8c90-ab3a460b7e01",
+		"first_name": "Mitchell",
+		"last_name": "Mimi",
+		"email": "mitchell1@gmail.com",
+		"username": "Mitchu-Mimi",
+		"is_superuser": false,
+		"is_saller": false,
+		"createdAt": "2023-03-14T13:34:29.818991Z",
+		"updatedAt": null,
+		"address": {
+			"id": "2f174250-b861-4cc9-8407-06141498fdcc",
+			"state": "SP",
+			"city": "Campinas",
+			"district": "Taquaral",
+			"street": "R. Vasco Fernandes Coutinho",
+			"zip_code": "12345678",
+			"plus_information": "ao lado do parque"
+	},
+	"cart_id": "dab23a7d-c264-4352-bec8-97457f91d09e"
+	},
+	"amount": 2
+}
+```
+
+
+### Possíveis Erros:
+| Código do Erro | Descrição |
+|----------------|-----------|
+| 401 Unauthorized   | Authentication credentials were not provided. |
+| 403 Forbiden   | You do not have permission to perform this action. |
+| 404 Not Found   | Not found.  |
+
+---
+
+
+## 5. **Carrinho**
+[ Voltar para o topo ](#tabela-de-conteúdos)
+
+### Endpoints
+
+| Método   | Rota       | Descrição                               |
+|----------|------------|-----------------------------------------|
+| POST     | /api/shopping_cart/:product_id/    | Adição de um produto no carrinho.  |
+| GET      | /api/cart/:cart_id/   | Lista todos as perguntas.  |
+| PATCH    | /api/shopping_cart_up/:shopping_cart_id/  | Editar a quantidade de um produto no carrinho usando seu ID como parâmetro. |
+| DELETE    | /api/cart/:cart_id/  | Deleta todos os produtos de um carrinho. |  
+
+---
+
+### 5.1. **Adicionando produto ao carrinho** 
+
+### Exemplo de Request:
+```
+POST /api/shopping_cart/7de60fa2-f668-4480-be83-dff06a9f3696/
+Host: https://kenzie-commerce-api-production.up.railway.app
+Authorization: Bearer token
+Content-type: application/json
+```
+
+### Exemplo de Corpo da Requisição:
+```json
+{
+	"amount": 2
+}
+```
+
+### Exemplo de Response:
+```
+201 Created
+```
+
+```json
+{
+	"id": "56e0d136-e0a3-4abb-9f26-adf2b1d86a48",
+	"cart": "dab23a7d-c264-4352-bec8-97457f91d09e",
+	"product": "7de60fa2-f668-4480-be83-dff06a9f3696",
+	"amount": 2
+}
+```
+
+### Possíveis Erros:
+| Código do Erro | Descrição |
+|----------------|-----------|
+| 401 Unauthorized   | Authentication credentials were not provided. |
+| 400 Bad Request  | The product's amount is not avaliable |
+| 403 Forbiden	| You do not have permission to perform this action. |
+| 404 Not Found	| Not found. | 
+
+
+---
+
+### 5.2. **Editando quantidade de produto no carrinho**
+### `PATCH /api/shopping_cart_up/:shopping_cart_id`
+
+### Exemplo de Request:
+```
+PATCH api/shopping_cart_up/56e0d136-e0a3-4abb-9f26-adf2b1d86a48/
+Host: https://kenzie-commerce-api-production.up.railway.app
+Authorization: Bearer token
+Content-type: application/json
+```
+
+### Parâmetros da Requisição:
+| Parâmetro   | Tipo        | Descrição                             |
+|-------------|-------------|---------------------------------------|
+| shopping_cart_id     | string      | Identificador único do carrinho (ShoppingCart) |
+
+### Exemplo de Corpo da Requisição:
+```json
+{
+	"amount": 5
+}
+```
+
+### Exemplo de Response:
+```
+200 OK
+```
+
+```json
+{
+	"id": "56e0d136-e0a3-4abb-9f26-adf2b1d86a48",
+	"cart": "dab23a7d-c264-4352-bec8-97457f91d09e",
+	"product": "7de60fa2-f668-4480-be83-dff06a9f3696",
+	"amount": 5
+}
+```
+
+### Possíveis Erros:
+| Código do Erro | Descrição |
+|----------------|-----------|
+| 401 Unauthorized   | Authentication credentials were not provided. |
+| 400 Bad Request  | The product's amount is not avaliable |
+| 403 Forbiden	| You do not have permission to perform this action. |
+| 404 Not Found	| Not found. | 
+
+---
+
+### 5.3. **Listando carrinho**
+
+### `GET /api/cart/:cart_id/` 
+
+### Exemplo de Request:
+GET api/cart/dab23a7d-c264-4352-bec8-97457f91d09e/
+Host: https://kenzie-commerce-api-production.up.railway.app
+Authorization: Bearer token
+Content-type: None
+```
+
+### Corpo da Requisição:
+```json
+Vazio
+```
+
+### Exemplo de Response:
+```
+200 OK
+```
+```json
+{
+	"id": "dab23a7d-c264-4352-bec8-97457f91d09e",
+	"cart_cart_products": [
+		{
+			"id": "c2a53eaf-cbbc-4e01-9696-20d9f27c55de",
+			"amount": 2,
+			"createdAt": "2023-03-14T14:21:13.518116Z",
+			"cart": "dab23a7d-c264-4352-bec8-97457f91d09e",
+			"product": "e0893e3a-a600-4480-bedb-85a37697c9e4"
+		},
+
+	],
+	"products": [
+		{
+			"id": "f1fc0e0b-d84b-47a9-a86f-fcd899acf643",
+			"name_product": "Xbox one",
+			"price": 1400.0,
+			"stock": 10,
+			"is_avaliable": true,
+			"user": "efde725b-cbe2-45e2-b87a-8db7a6128ca5",
+			"category": "7f8c1692-ab46-4eba-a699-e6d03c074032"
+		},
+		{
+			"id": "e0893e3a-a600-4480-bedb-85a37697c9e4",
+			"name_product": "Como ficar milionário em 30 anos",
+			"price": 5000.0,
+			"stock": 0,
+			"is_avaliable": false,
+			"user": "4613b422-aae0-4411-bb4b-d8a0093c0542",
+			"category": "61def0c2-3e64-4f52-8dde-33a3a0e12226"
+		},
+
+	]
+}
+```
+
+### Possíveis Erros:
+| Código do Erro | Descrição |
+|----------------|-----------|
+| 401 Unauthorized   | Authentication credentials were not provided. |
+| 403 Forbiden	| You do not have permission to perform this action. |
+| 404 Not Found	| Not found. | 
+
+---
+
+### 4.4. **Deletar todos os produtos do carrinho** 
+
+### `DELETE api/cart/:cart_id` 
+
+### Exemplo de Request:
+```
+DELETE api/cart/dab23a7d-c264-4352-bec8-97457f91d09e
+Host: https://kenzie-commerce-api-production.up.railway.app
+Authorization: Bearer token
+Content-type: None
+```
+
+### Parâmetros da Requisição:
+| Parâmetro   | Tipo        | Descrição                             |
+|-------------|-------------|---------------------------------------|
+| cart_id     | string      | Identificador único do carrinho (ShoppingCart) |
+
+### Corpo da Requisição:
+```json
+Vazio
+```
+
+### Exemplo de Response:
+```
+204 No content
+```
+```json
+Vazio
+```
+
+### Possíveis Erros:
+| Código do Erro | Descrição |
+|----------------|-----------|
+| 401 Unauthorized   | Authentication credentials were not provided. |
+| 403 Forbiden	| You do not have permission to perform this action. |
+| 404 Not Found	| Not found. | 
+
+--- 
+
+## 6. Desenvolvedores
+[ Voltar para o topo ](#tabela-de-conteúdos)
+
+[Felipe Nogueira](https://github.com/Flipsy1)
+
+[Flavia Monteiro](https://github.com/FlaviaBMonteiro)
+
+[Leonardo Neves](https://github.com/Leo-neves20)
+
+[Victoria Milan](https://github.com/victoriamilans)
+
+
 
 
