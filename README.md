@@ -99,11 +99,11 @@ python manage.py runserver
 
 | Método   | Rota       | Descrição                               |
 |----------|------------|-----------------------------------------|
-| POST     | /api/users     | Criação de um usuário.                  |
-| GET      | /api/users     | Lista todos os usuários                 |
-| GET      | /api/users/:user_id     | Lista um usuário usando seu ID como parâmetro |
-| PATCH    | /api/users/:user_id     | Editar as informações do usuário usando seu ID como parâmetro   |
-| DELETE    | /api/users/:user_id     | Deletar usuário usando seu ID como parâmetro   
+| POST     | /api/users/     | Criação de um usuário.                  |
+| GET      | /api/users/     | Lista todos os usuários                 |
+| GET      | /api/users/:user_id/     | Lista um usuário usando seu ID como parâmetro |
+| PATCH    | /api/users/:user_id/     | Editar as informações do usuário usando seu ID como parâmetro   |
+| DELETE    | /api/users/:user_id/     | Deletar usuário usando seu ID como parâmetro   
 
 ---
 
@@ -583,6 +583,15 @@ Vazio
 }
 ```
 
+Os produtos também podem ser pesquisados por parâmtro na requisição:
+
+https://kenzie-commerce-api-production.up.railway.app/api/products/?category=67f132d9-057a-482c-af1c-f22f50eb6439
+
+https://kenzie-commerce-api-production.up.railway.app/api/products/?name_product=Xbox%20One
+
+https://kenzie-commerce-api-production.up.railway.app/api/products/?id=f1fc0e0b-d84b-47a9-a86f-fcd899acf643
+
+
 ### Possíveis Erros:
 | Código do Erro | Descrição |
 |----------------|-----------|
@@ -700,10 +709,10 @@ Vazio
 
 | Método   | Rota       | Descrição                               |
 |----------|------------|-----------------------------------------|
-| POST     | /api/orders     | Criação de um pedido.                  |
-| GET      | /api/orders/user     | Lista todos os pedidos do usuário logado.  | 
+| POST     | /api/orders/     | Criação de um pedido.                  |
+| GET      | /api/orders/user/     | Lista todos os pedidos do usuário logado.  | 
 | GET    | /api/orders/product/list/     | Lista todos os produtos de um pedido.  | 
-| PATCH    | /api/orders/:order_id     | Editar as informações de um pedido usando seu ID como parâmetro.  |
+| PATCH    | /api/orders/:order_id/     | Editar as informações de um pedido usando seu ID como parâmetro.  |
 
 ---
 
