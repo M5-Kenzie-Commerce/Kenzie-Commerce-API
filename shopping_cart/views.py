@@ -1,7 +1,11 @@
 from .models import CartProduct, Cart
 from .serializers import ShoppingCartSerializer, CartSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView
+from rest_framework.generics import (
+    CreateAPIView,
+    UpdateAPIView,
+    RetrieveDestroyAPIView,
+)
 from django.shortcuts import get_object_or_404
 from products.models import Product
 from rest_framework.permissions import IsAuthenticated
@@ -34,7 +38,7 @@ class ShoppingCartUpdateView(UpdateAPIView):
     lookup_url_kwarg = "shopping_cart_id"
 
 
-class CartDetailView(RetrieveAPIView):
+class CartDetailView(RetrieveDestroyAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsCartOwnerOrAdminToCart]
 
@@ -42,3 +46,7 @@ class CartDetailView(RetrieveAPIView):
     serializer_class = CartSerializer
 
     lookup_url_kwarg = "cart_id"
+
+    def perform_destroy(self, instance: Cart):
+        cart_products_list = CartProduct.objects.filter(cart=instance.id)
+        cart_products_list.delete()
