@@ -1127,11 +1127,11 @@ Content-type: application/json
 ### `GET /api/cart/:cart_id/` 
 
 ### Exemplo de Request:
+
 GET api/cart/dab23a7d-c264-4352-bec8-97457f91d09e/
 Host: https://kenzie-commerce-api-production.up.railway.app
 Authorization: Bearer token
 Content-type: None
-```
 
 ### Corpo da Requisição:
 ```json
@@ -1188,7 +1188,7 @@ Vazio
 
 ---
 
-### 4.4. **Deletar todos os produtos do carrinho** 
+### 5.4. **Deletar todos os produtos do carrinho** 
 
 ### `DELETE api/cart/:cart_id` 
 
